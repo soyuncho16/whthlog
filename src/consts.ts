@@ -9,6 +9,6 @@ export const SITE_DESCRIPTION = 'CS 기초로 푼 트러블슈팅 기록';
 export const GISCUS = {
 	repo: 'soyuncho16/whthlog',
 	repoId: 'R_kgDOSyvhnQ',
-	category: 'Announcements',
-	categoryId: 'DIC_kwDOSyvhnc4C-5d2',
+	category: 'Comment',
+	categoryId: 'DIC_kwDOSyvhnc4C-5h-',
 };
