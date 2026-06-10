@@ -18,6 +18,10 @@ stack: [ros2, docker, ...]
 
 `cs_area`·`concept`·`status`·`stack` 은 전부 optional 이라 일반 글도 같은 컬렉션에 들어간다. 트러블슈팅 포스트는 넷 다 채운다.
 
+최소 frontmatter 는 `title` + `pubDate` 2줄 (`description` 도 optional — 없으면 본문에서 자동 발췌).
+
+본문에서 `> **내 진단** ...` 으로 시작하는 인용문은 블로그에서 앰버 aside 로 강조된다 (벨로그/GitHub 에선 평범한 인용문으로 강등 — 이식성 유지).
+
 ## 본문 섹션 (순서 고정)
 
 ### 한 줄

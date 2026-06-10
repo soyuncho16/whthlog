@@ -4,6 +4,7 @@ export function excerpt(body: string | undefined, max = 150): string {
 	const text = body
 		.replace(/```[\s\S]*?```/g, ' ') // 코드블록 제거
 		.replace(/\$\$[\s\S]*?\$\$/g, ' ') // 블록 수식 제거
+		.replace(/\$[^$\n]+\$/g, ' ') // 인라인 수식 제거
 		.replace(/^#+\s.*$/gm, ' ') // 헤딩 제거
 		.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // 이미지 제거
 		.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // 링크는 텍스트만

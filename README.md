@@ -1,63 +1,18 @@
-# Astro Starter Kit: Blog
+# whthlog
+
+CS 기초(OS·컴퓨터구조·네트워크·자료구조·알고리즘)를 실제 문제에 적용해 푼
+트러블슈팅을 발행하는 공개 블로그. https://soyuncho16.github.io/whthlog/
+
+- Astro + GitHub Pages. `main` 에 push 하면 GitHub Actions 가 자동 배포한다.
+- 포스트 = `src/content/blog/*.md` 마크다운 파일 하나. 발행 = `git push`.
+- frontmatter 는 `title`, `pubDate` 두 줄이면 충분하다 (나머지는 옵션 — `POST_FORMAT.md` 참고).
+- `> **내 진단** ...` 인용문은 앰버 aside 로 강조된다 (다른 플랫폼에선 평범한 인용문으로 강등).
+- 캡처·발행 자동화는 Claude Code 의 `/cs-ts` 스킬 (`tools/cs-ts-skill.md`).
+
+## 로컬
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run dev    # http://localhost:4321/whthlog/
+npm run build
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
