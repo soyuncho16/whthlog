@@ -1,0 +1,16 @@
+<button id="theme-toggle" class="chip" aria-label="다크 모드 전환">◐</button>
+
+<script>
+	const btn = document.getElementById('theme-toggle');
+	btn?.addEventListener('click', () => {
+		const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+		document.documentElement.dataset.theme = next;
+		localStorage.setItem('theme', next);
+		// giscus iframe 테마 동기화 (없으면 no-op)
+		const frame = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+		frame?.contentWindow?.postMessage(
+			{ giscus: { setConfig: { theme: next } } },
+			'https://giscus.app',
+		);
+	});
+</script>
