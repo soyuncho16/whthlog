@@ -1,8 +1,24 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { base } from '../lib/url';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const AREAS: [string, string][] = [
+	['os', 'os'],
+	['arch', 'arch'],
+	['network', 'network'],
+	['data-structures', 'ds'],
+	['algorithms', 'algo'],
+];
+const count = (area: string) =>
+	posts.filter((p) => p.data.cs_area?.includes(area as never)).length;
 ---
 
 <!doctype html>
@@ -13,21 +29,90 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>whthlog</h1>
-			<p>
-				CS 기초(OS, 컴퓨터구조, 네트워크, 자료구조, 알고리즘)를 실제 문제에
-				적용해 원인을 짚고 해결한 트러블슈팅 기록입니다. "무엇을 고쳤나"보다
-				<strong>"어떤 개념으로, 왜 그렇게 풀었나"</strong>에 무게를 둡니다.
+			<p class="intro">
+				CS 기초(OS·컴퓨터구조·네트워크·자료구조·알고리즘)를 실제 문제에 적용해 푼
+				트러블슈팅 기록. "무엇을 고쳤나"보다 <strong>"어떤 개념으로, 왜"</strong>에
+				무게를 둡니다. 진단은 직접 추론한 것을 1인칭으로 남기고, 막혀서 도움받은
+				지점은 솔직하게 적습니다.
 			</p>
-			<p>
-				대부분 VIO 비교 연구와 ROS2·Docker 인프라를 만지다 만난 문제들입니다.
-				진단은 직접 추론한 것을 1인칭으로 남기고, 막혀서 도움받은 지점은
-				솔직하게 적습니다.
-			</p>
-			<p>
-				<a href={`${import.meta.env.BASE_URL}blog/`}>글 목록 보기 →</a>
-			</p>
+			<div class="chips" role="group" aria-label="cs_area 필터">
+				<button class="chip on" data-area="all">전체 {posts.length}</button>
+				{
+					AREAS.map(([area, label]) => (
+						<button class="chip" data-area={area} disabled={count(area) === 0}>
+							{label} {count(area)}
+						</button>
+					))
+				}
+			</div>
+			<ul class="posts">
+				{
+					posts.map((post) => (
+						<li data-areas={(post.data.cs_area ?? []).join(' ')}>
+							<FormattedDate date={post.data.pubDate} />
+							<a href={`${base}blog/${post.id}/`}>{post.data.title}</a>
+						</li>
+					))
+				}
+			</ul>
 		</main>
 		<Footer />
+
+		<script>
+			const chips = [...document.querySelectorAll<HTMLButtonElement>('.chips .chip')];
+			const items = [...document.querySelectorAll<HTMLLIElement>('.posts li')];
+
+			function apply(area: string) {
+				chips.forEach((c) => c.classList.toggle('on', c.dataset.area === area));
+				items.forEach((li) => {
+					li.hidden =
+						area !== 'all' && !(li.dataset.areas ?? '').split(' ').includes(area);
+				});
+			}
+
+			chips.forEach((c) =>
+				c.addEventListener('click', () => {
+					const area = c.dataset.area ?? 'all';
+					history.replaceState(null, '', area === 'all' ? location.pathname : `#${area}`);
+					apply(area);
+				}),
+			);
+
+			const initial = location.hash.slice(1);
+			if (initial && chips.some((c) => c.dataset.area === initial)) apply(initial);
+		</script>
+
+		<style>
+			.intro {
+				color: var(--ink-soft);
+				margin-bottom: 1.5em;
+			}
+			.chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin-bottom: 1em;
+			}
+			.posts {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.posts li {
+				display: flex;
+				align-items: baseline;
+				gap: 1em;
+				padding: 0.55em 0;
+				border-bottom: 1px solid var(--line);
+			}
+			.posts a {
+				color: var(--ink);
+				text-decoration: none;
+				font-weight: 550;
+			}
+			.posts a:hover {
+				color: var(--accent);
+			}
+		</style>
 	</body>
 </html>
