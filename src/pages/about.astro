@@ -1,24 +1,31 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 ---
 
-<Layout
-	title="소개"
-	description="whthlog — CS 기초로 푼 트러블슈팅 기록"
-	pubDate={new Date('June 06 2026')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		연구하다 만나는 문제를 CS 기초(OS, 컴퓨터구조, 네트워크, 자료구조,
-		알고리즘)로 되짚어 푸는 기록입니다. 증상만 고치고 넘어가는 대신,
-		"이게 어느 레이어 문제고, 어떤 개념이라서 이렇게 풀리는가"를 직접
-		추론해 1인칭으로 남깁니다.
-	</p>
-	<p>
-		대부분은 VIO(Visual-Inertial Odometry) 비교 연구와 ROS2·Docker 인프라를
-		만지다 나온 사건들입니다. 막혀서 검색·문서·도구의 도움을 받은 지점은
-		글 안에 솔직하게 적습니다 — 매끈하게 포장하기보다 실제로 어떻게
-		생각했는지가 남아야 다시 꺼내 쓸 수 있으니까요.
-	</p>
-</Layout>
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="소개 — whthlog" description="whthlog — CS 기초로 푼 트러블슈팅 기록" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>소개</h1>
+			<p>
+				연구하다 만나는 문제를 CS 기초(OS, 컴퓨터구조, 네트워크, 자료구조,
+				알고리즘)로 되짚어 푸는 기록입니다. 증상만 고치고 넘어가는 대신,
+				"이게 어느 레이어 문제고, 어떤 개념이라서 이렇게 풀리는가"를 직접
+				추론해 1인칭으로 남깁니다.
+			</p>
+			<p>
+				대부분은 VIO(Visual-Inertial Odometry) 비교 연구와 ROS2·Docker 인프라를
+				만지다 나온 사건들입니다. 막혀서 검색·문서·도구의 도움을 받은 지점은
+				글 안에 솔직하게 적습니다 — 매끈하게 포장하기보다 실제로 어떻게
+				생각했는지가 남아야 다시 꺼내 쓸 수 있으니까요.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
