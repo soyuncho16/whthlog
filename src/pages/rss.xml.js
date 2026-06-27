@@ -9,7 +9,8 @@ export async function GET(context) {
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
-		site: context.site,
+		// base 포함 블로그 홈으로 채널 link 고정. item 링크는 절대경로(/whthlog/...)라 그대로 정상 해석.
+		site: new URL(base, context.site),
 		items: posts.map((post) => ({
 			title: post.data.title,
 			pubDate: post.data.pubDate,
