@@ -105,6 +105,10 @@ const count = (area: string) =>
 				padding: 0.55em 0;
 				border-bottom: 1px solid var(--line);
 			}
+			/* author `display:flex` 가 UA 의 [hidden]{display:none} 를 덮으므로 명시 복구 */
+			.posts li[hidden] {
+				display: none;
+			}
 			.posts a {
 				color: var(--ink);
 				text-decoration: none;
