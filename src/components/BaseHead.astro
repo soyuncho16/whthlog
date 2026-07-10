@@ -31,10 +31,12 @@ const { title, description, image } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Fonts: Wanted Sans (한글 본문·제목) + JetBrains Mono (코드) -->
+<!-- Fonts: IBM Plex Sans KR (한글 본문·제목) + JetBrains Mono (코드) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
 	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@main/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
+	href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
 />
 <link
 	rel="stylesheet"
