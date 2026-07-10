@@ -2,46 +2,218 @@
 import { SITE_TITLE } from '../consts';
 import ThemeToggle from './ThemeToggle.astro';
 import { base } from '../lib/url';
+import { SECTIONS } from '../lib/taxonomy';
 ---
 
-<header>
+<header id="site-header">
 	<nav>
 		<a class="brand" href={base}>{SITE_TITLE}</a>
-		<div class="links">
-			<a href={`${base}about/`}>소개</a>
-			<a href="https://github.com/soyuncho16/whthlog" target="_blank" rel="noopener">GitHub</a>
-			<ThemeToggle />
+
+		<button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+
+		<div class="menu">
+			<ul class="sections">
+				{
+					SECTIONS.map((s) => (
+						<li class="section">
+							<a href={`${base}${s.key}/`}>{s.label}</a>
+							<ul class="dropdown">
+								{s.subsections.map((sub) => (
+									<li>
+										<a href={`${base}${s.key}/${sub.key}/`}>{sub.label}</a>
+									</li>
+								))}
+							</ul>
+						</li>
+					))
+				}
+			</ul>
+			<div class="tail">
+				<input
+					class="search"
+					type="search"
+					placeholder="검색 (준비 중)"
+					disabled
+					aria-label="검색 (준비 중)"
+				/>
+				<ThemeToggle />
+			</div>
 		</div>
 	</nav>
 </header>
+
+<script>
+	// 스크롤 시 헤더 축소 + 그림자
+	const header = document.getElementById('site-header');
+	const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+	onScroll();
+	window.addEventListener('scroll', onScroll, { passive: true });
+
+	// 모바일 햄버거
+	const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+	toggle?.addEventListener('click', () => {
+		const open = header?.classList.toggle('open') ?? false;
+		toggle.setAttribute('aria-expanded', String(open));
+	});
+</script>
+
 <style>
 	header {
-		border-bottom: 1px solid var(--line);
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: var(--bar-bg);
+		backdrop-filter: saturate(180%) blur(12px);
+		border-bottom: 1px solid transparent;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease,
+			padding 0.2s ease;
+	}
+	header.scrolled {
+		border-bottom-color: var(--line);
+		box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05);
 	}
 	nav {
-		max-width: 68ch;
+		max-width: 72rem;
 		margin: 0 auto;
-		padding: 0.9em 1em;
+		padding: 0.85em 1.25em;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		transition: padding 0.2s ease;
+	}
+	header.scrolled nav {
+		padding-top: 0.55em;
+		padding-bottom: 0.55em;
 	}
 	.brand {
 		font-weight: 700;
-		font-size: 1.05em;
+		font-size: 1.1em;
 		text-decoration: none;
 		color: var(--ink);
 	}
-	.links {
+	.menu {
 		display: flex;
 		align-items: center;
-		gap: 1em;
+		gap: 1.5em;
 	}
-	.links a {
+	.sections {
+		list-style: none;
+		display: flex;
+		gap: 1.25em;
+		margin: 0;
+		padding: 0;
+	}
+	.section {
+		position: relative;
+	}
+	.section > a {
 		color: var(--ink-soft);
 		text-decoration: none;
+		font-weight: 550;
+		padding: 0.4em 0;
 	}
-	.links a:hover {
+	.section > a:hover,
+	.section:focus-within > a {
 		color: var(--ink);
+	}
+	.dropdown {
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%) translateY(4px);
+		list-style: none;
+		margin: 0;
+		padding: 0.35em;
+		min-width: 8em;
+		background: var(--bg);
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		box-shadow: var(--card-shadow);
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.15s ease,
+			transform 0.15s ease;
+	}
+	.section:hover .dropdown,
+	.section:focus-within .dropdown {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(-50%) translateY(0);
+	}
+	.dropdown a {
+		display: block;
+		padding: 0.35em 0.7em;
+		border-radius: 6px;
+		color: var(--ink-soft);
+		text-decoration: none;
+		font-size: 0.92em;
+		white-space: nowrap;
+	}
+	.dropdown a:hover {
+		background: var(--bg-tint);
+		color: var(--ink);
+	}
+	.tail {
+		display: flex;
+		align-items: center;
+		gap: 0.75em;
+	}
+	.search {
+		font: inherit;
+		font-size: 0.85em;
+		padding: 0.3em 0.7em;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		background: var(--bg-tint);
+		color: var(--ink-soft);
+		width: 11em;
+	}
+	.menu-toggle {
+		display: none;
+		background: none;
+		border: none;
+		font-size: 1.3em;
+		color: var(--ink);
+		cursor: pointer;
+	}
+	@media (max-width: 720px) {
+		.menu-toggle {
+			display: block;
+		}
+		.menu {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.5em;
+			padding: 1em 1.25em;
+			background: var(--bg);
+			border-bottom: 1px solid var(--line);
+			display: none;
+		}
+		header.open .menu {
+			display: flex;
+		}
+		.sections {
+			flex-direction: column;
+			gap: 0.25em;
+		}
+		.dropdown {
+			position: static;
+			transform: none;
+			opacity: 1;
+			visibility: visible;
+			box-shadow: none;
+			border: none;
+			padding: 0 0 0 1em;
+		}
+		.search {
+			width: 100%;
+		}
 	}
 </style>

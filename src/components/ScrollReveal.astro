@@ -1,0 +1,25 @@
+---
+// .reveal 요소를 뷰포트 진입 시 한 번만 나타낸다. prefers-reduced-motion 은 CSS 가 처리.
+---
+
+<script>
+	const els = document.querySelectorAll<HTMLElement>('.reveal');
+	if (!els.length) {
+		// nothing to observe
+	} else if (!('IntersectionObserver' in window)) {
+		els.forEach((el) => el.classList.add('in'));
+	} else {
+		const io = new IntersectionObserver(
+			(entries, obs) => {
+				for (const e of entries) {
+					if (e.isIntersecting) {
+						e.target.classList.add('in');
+						obs.unobserve(e.target);
+					}
+				}
+			},
+			{ rootMargin: '0px 0px -10% 0px', threshold: 0.05 },
+		);
+		els.forEach((el) => io.observe(el));
+	}
+</script>
