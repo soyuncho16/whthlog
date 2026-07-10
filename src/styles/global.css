@@ -79,6 +79,8 @@ h6 {
 	margin: 1.6em 0 0.5em;
 	line-height: 1.35;
 	font-weight: 700;
+	/* 앵커/목차 클릭 시 스티키 상단바에 가리지 않도록 여백 확보 */
+	scroll-margin-top: 4.5rem;
 }
 h1 {
 	font-size: 1.87em;

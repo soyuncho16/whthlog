@@ -104,26 +104,27 @@
 		overflow-y: auto;
 	}
 	.toc-body a {
-		padding: 0.3em 0.6em;
+		padding: 0.3em 0.7em 0.3em 1.4em;
 		border-radius: 6px;
 		color: var(--ink-soft);
 		text-decoration: none;
-		font-size: 0.85em;
+		font-size: 0.8em;
 		line-height: 1.4;
 		border-left: 2px solid transparent;
 	}
 	.toc-body a.lvl3 {
-		padding-left: 1.4em;
-		font-size: 0.8em;
+		padding-left: 2.4em;
+		font-size: 0.75em;
 	}
 	.toc-body a:hover {
 		color: var(--ink);
 		background: var(--bg-tint);
 	}
 	.toc-body a.active {
-		color: var(--accent);
-		border-left-color: var(--accent);
-		background: var(--accent-tint);
+		color: var(--ink);
+		border-left-color: var(--ink-soft);
+		background: var(--bg-tint);
+		font-weight: 600;
 	}
 	/* 접힘 = 알약 */
 	.toc[data-state='closed'] {
