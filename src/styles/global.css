@@ -14,12 +14,12 @@
 	--accent: #1f6f8b; /* teal — 라이트 메인색 (본문 위 가독 확보) */
 	--accent-tint: #edf5f6; /* aside 배경 (teal wash) */
 	--accent-grad: linear-gradient(100deg, #1f6f8b 0%, #2f7d78 45%, #276749 100%); /* 채움 요소: 청록→깊은초록 */
-	/* cs_area 색 (라이트) */
-	--area-os: #ab6400;
-	--area-arch: #7b53b3;
-	--area-network: #2f7d9a;
-	--area-data-structures: #3d8b47;
-	--area-algorithms: #b0507e;
+	/* cs_area 색 (라이트) — 청록→초록 브랜드와 충돌 없게 재조정 */
+	--area-os: #a5532b; /* 구리/코퍼 */
+	--area-arch: #7b53b3; /* 보라 */
+	--area-network: #3f5fb0; /* 슬레이트 블루 */
+	--area-data-structures: #8f7519; /* 브래스/골드 */
+	--area-algorithms: #b0507e; /* 로즈 */
 	/* 포털 표면 토큰 */
 	--radius: 12px;
 	--card-shadow: 0 1px 2px rgba(33, 32, 28, 0.04), 0 4px 12px rgba(33, 32, 28, 0.05);
@@ -39,11 +39,11 @@
 	--accent-tint: #26221a;
 	--accent-grad: var(--accent); /* 다크는 앰버 단색 유지 (채움 요소도 solid) */
 	/* cs_area 색 (다크 — 밝게 보정) */
-	--area-os: #f0b429;
-	--area-arch: #b18ae8;
-	--area-network: #6cc4e0;
-	--area-data-structures: #6dd07f;
-	--area-algorithms: #e88ab5;
+	--area-os: #e0965c; /* 구리/코퍼 */
+	--area-arch: #b18ae8; /* 보라 */
+	--area-network: #8fa4e0; /* 슬레이트 블루 */
+	--area-data-structures: #cdb24d; /* 브래스/골드 */
+	--area-algorithms: #e88ab5; /* 로즈 */
 	/* 포털 표면 토큰 (다크) */
 	--card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.28);
 	--card-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.42);
