@@ -58,8 +58,8 @@ body {
 	margin: 0;
 	background: var(--bg);
 	color: var(--ink);
-	font-size: 17px;
-	line-height: 1.75;
+	font-size: 15.5px;
+	line-height: 1.8;
 	word-break: keep-all;
 	overflow-wrap: break-word;
 }
@@ -81,14 +81,14 @@ h6 {
 	font-weight: 700;
 }
 h1 {
-	font-size: 1.7em;
+	font-size: 1.87em;
 	margin-top: 0.4em;
 }
 h2 {
-	font-size: 1.35em;
+	font-size: 1.42em;
 }
 h3 {
-	font-size: 1.15em;
+	font-size: 1.16em;
 }
 h4,
 h5,
