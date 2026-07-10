@@ -2,6 +2,8 @@
 title: 'Xvfb 가상 X 서버로 잡은 cannot open display'
 description: '모니터 없는 Docker 컨테이너에서 GUI 의존 VIO가 죽는 이유를 X11 구조로 풀고, Xvfb로 푼 기록'
 pubDate: 'Jun 06 2026'
+section: cs
+subsection: troubleshooting
 cs_area: [os, network]
 concept: [client-server, display-server, IPC, environment-variable]
 status: resolved
