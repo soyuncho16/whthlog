@@ -11,8 +11,9 @@
 	--ink: #21201c; /* sand 12 */
 	--ink-soft: #63635e; /* sand 11 */
 	--line: #e6e4df; /* sand 6 */
-	--accent: #ab6400; /* amber 11 — 본문 위 가독 확보 */
-	--accent-tint: #fdf6e3; /* aside 배경 */
+	--accent: #1f6f8b; /* teal — 라이트 메인색 (본문 위 가독 확보) */
+	--accent-tint: #edf5f6; /* aside 배경 (teal wash) */
+	--accent-grad: linear-gradient(100deg, #1f6f8b 0%, #2f7d78 45%, #276749 100%); /* 채움 요소: 청록→깊은초록 */
 	/* cs_area 색 (라이트) */
 	--area-os: #ab6400;
 	--area-arch: #7b53b3;
@@ -24,7 +25,7 @@
 	--card-shadow: 0 1px 2px rgba(33, 32, 28, 0.04), 0 4px 12px rgba(33, 32, 28, 0.05);
 	--card-shadow-hover: 0 2px 6px rgba(33, 32, 28, 0.08), 0 12px 28px rgba(33, 32, 28, 0.1);
 	--bar-bg: rgba(253, 253, 251, 0.82);
-	--hero-grad: radial-gradient(120% 120% at 100% 0%, #fdf6e3 0%, var(--bg) 55%);
+	--hero-grad: radial-gradient(120% 120% at 100% 0%, #e4efe9 0%, var(--bg) 55%);
 	--mono: 'JetBrains Mono', 'Pretendard Variable', monospace;
 }
 
@@ -36,6 +37,7 @@
 	--line: #3b3a36;
 	--accent: #f0b429; /* amber dark */
 	--accent-tint: #26221a;
+	--accent-grad: var(--accent); /* 다크는 앰버 단색 유지 (채움 요소도 solid) */
 	/* cs_area 색 (다크 — 밝게 보정) */
 	--area-os: #f0b429;
 	--area-arch: #b18ae8;
@@ -247,7 +249,7 @@ button.chip:disabled {
 	bottom: -0.15em;
 	height: 3px;
 	border-radius: 3px;
-	background: var(--accent);
+	background: var(--accent-grad);
 }
 
 @media (prefers-reduced-motion: reduce) {

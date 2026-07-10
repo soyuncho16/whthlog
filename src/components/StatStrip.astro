@@ -43,7 +43,11 @@ const items = [
 		font-family: var(--mono);
 		font-size: 1.9em;
 		font-weight: 700;
-		color: var(--accent);
+		color: var(--accent); /* 폴백 (background-clip 미지원 시) */
+		background: var(--accent-grad);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
 		line-height: 1;
 	}
 	.label {
