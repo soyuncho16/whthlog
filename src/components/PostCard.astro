@@ -16,14 +16,23 @@ interface Props {
 const { id, title, section, subsection, cs_area, concept, pubDate, featured } = Astro.props;
 
 const areas = cs_area ?? [];
-const primaryVar = areaMeta(areas[0] ?? '')?.cssVar ?? '--accent';
+// 카드 밑줄: 영역이 여럿이면 각 영역 색을 잇는 그라디언트, 하나면 그 색, 없으면 브랜드.
+const areaVars = areas
+	.map((a) => areaMeta(a)?.cssVar)
+	.filter((v): v is string => Boolean(v));
+const ruleBg =
+	areaVars.length >= 2
+		? `linear-gradient(90deg, ${areaVars.map((v) => `var(${v})`).join(', ')})`
+		: areaVars.length === 1
+			? `var(${areaVars[0]})`
+			: 'var(--accent)';
 const label = subsectionLabel(section, subsection);
 ---
 
 <article
 	class:list={['card', 'reveal', { featured }]}
 	data-areas={areas.join(' ')}
-	style={`--card-accent: var(${primaryVar})`}
+	style={`--card-accent: ${ruleBg}`}
 >
 	<a class="hit" href={`${base}blog/${id}/`} aria-label={title}></a>
 	<div class="cat">
