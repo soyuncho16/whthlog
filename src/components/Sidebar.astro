@@ -4,13 +4,8 @@ import { SECTIONS } from '../lib/taxonomy';
 
 interface Props {
 	subsectionCounts: Record<string, number>;
-	concepts: { concept: string; count: number }[];
 }
-const { subsectionCounts, concepts } = Astro.props;
-
-// 태그 클라우드 폰트 크기: 빈도 최소~최대를 0.72rem~1.05rem 로 선형 매핑
-const maxCount = Math.max(1, ...concepts.map((c) => c.count));
-const sizeFor = (n: number) => 0.72 + (n / maxCount) * 0.33;
+const { subsectionCounts } = Astro.props;
 ---
 
 <aside class="sidebar">
@@ -53,21 +48,6 @@ const sizeFor = (n: number) => 0.72 + (n / maxCount) * 0.33;
 			}
 		</ul>
 	</nav>
-
-	{
-		concepts.length > 0 && (
-			<div class="card cloud reveal">
-				<h3>개념</h3>
-				<div class="tags">
-					{concepts.map((c) => (
-						<span class="tag" style={`font-size:${sizeFor(c.count)}rem`}>
-							{c.concept}
-						</span>
-					))}
-				</div>
-			</div>
-		)
-	}
 </aside>
 
 <style>
@@ -149,18 +129,5 @@ const sizeFor = (n: number) => 0.72 + (n / maxCount) * 0.33;
 		font-family: var(--mono);
 		font-size: 0.85em;
 		opacity: 0.7;
-	}
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4em 0.5em;
-	}
-	.tag {
-		font-family: var(--mono);
-		color: var(--ink-soft);
-		line-height: 1.4;
-	}
-	.tag:hover {
-		color: var(--accent);
 	}
 </style>

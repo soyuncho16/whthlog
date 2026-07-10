@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeStats, conceptCloud, countBySubsection } from './stats';
+import { computeStats, countBySubsection } from './stats';
 
 const posts = [
 	{ data: { concept: ['IPC', 'mutex'], section: 'cs', subsection: 'troubleshooting' } },
@@ -13,16 +13,6 @@ describe('computeStats', () => {
 		expect(s.postCount).toBe(3);
 		expect(s.conceptCount).toBe(3); // IPC, mutex, lock-file
 		expect(s.sectionCount).toBe(3); // cs, dev, paper (configured)
-	});
-});
-
-describe('conceptCloud', () => {
-	it('orders by count desc then name asc', () => {
-		expect(conceptCloud(posts)).toEqual([
-			{ concept: 'mutex', count: 2 },
-			{ concept: 'IPC', count: 1 },
-			{ concept: 'lock-file', count: 1 },
-		]);
 	});
 });
 

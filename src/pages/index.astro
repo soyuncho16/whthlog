@@ -7,13 +7,12 @@ import PostCard from '../components/PostCard.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { CS_AREAS } from '../lib/taxonomy';
-import { computeStats, conceptCloud, countBySubsection } from '../lib/stats';
+import { computeStats, countBySubsection } from '../lib/stats';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const stats = computeStats(posts);
-const concepts = conceptCloud(posts);
 const subCounts = countBySubsection(posts);
 
 const [featured, ...rest] = posts;
@@ -75,7 +74,7 @@ const areaCount = (area: string) =>
 			</div>
 		</div>
 
-		<Sidebar subsectionCounts={subCounts} concepts={concepts} />
+		<Sidebar subsectionCounts={subCounts} />
 	</div>
 </BaseLayout>
 
