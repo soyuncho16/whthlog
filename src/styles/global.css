@@ -236,7 +236,7 @@ button.chip:disabled {
 	transform: none;
 }
 
-/* 섹션 헤더 amber 언더라인 액센트 */
+/* 섹션 헤더 브랜드 언더라인 액센트 (청록→깊은초록) */
 .u-underline {
 	position: relative;
 	display: inline-block;
