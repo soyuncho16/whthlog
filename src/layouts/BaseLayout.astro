@@ -10,8 +10,9 @@ interface Props {
 	description: string;
 	image?: ImageMetadata;
 	wide?: boolean;
+	full?: boolean;
 }
-const { title, description, image, wide } = Astro.props;
+const { title, description, image, wide, full } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,7 +22,7 @@ const { title, description, image, wide } = Astro.props;
 	</head>
 	<body>
 		<Header />
-		<main class={wide ? 'wide' : undefined}>
+		<main class:list={[{ wide, full }]}>
 			<slot />
 		</main>
 		<Footer />
@@ -32,5 +33,10 @@ const { title, description, image, wide } = Astro.props;
 <style is:global>
 	main.wide {
 		max-width: 72rem;
+	}
+	main.full {
+		max-width: none;
+		padding-left: clamp(1rem, 4vw, 3.5rem);
+		padding-right: clamp(1rem, 4vw, 3.5rem);
 	}
 </style>

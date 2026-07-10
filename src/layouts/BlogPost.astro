@@ -47,7 +47,7 @@ const minutes = readingTime(body);
 const subCounts = countBySubsection(await getCollection('blog'));
 ---
 
-<BaseLayout title={title} description={description} image={heroImage} wide>
+<BaseLayout title={title} description={description} image={heroImage} full>
 	<div class="reading">
 		<aside class="side">
 			<Sidebar subsectionCounts={subCounts} />
@@ -126,10 +126,11 @@ const subCounts = countBySubsection(await getCollection('blog'));
 <style>
 	/* inpa 참고: 왼쪽 사이드바(넓은 화면만) + 아티클. 헤더는 아티클 폭 전체, 본문은 읽기 폭으로 좁게. */
 	.reading {
+		max-width: 84rem;
+		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 15rem minmax(0, 46rem);
-		gap: 3rem;
-		justify-content: center;
+		grid-template-columns: 15rem 1fr;
+		gap: 2.5rem;
 		align-items: start;
 	}
 	.side {
@@ -137,16 +138,20 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	}
 	article {
 		min-width: 0;
+		max-width: 52rem;
+		margin: 0 auto;
 	}
-	/* 제목·메타(post-head)는 아티클 폭 46rem 전체, 본문·네비는 읽기 폭 40rem 로 좁혀 비율을 만듦 */
+	/* 제목칸(post-head)은 아티클 폭 52rem 전체, 본문·네비는 읽기폭 40rem 중앙정렬 → 제목 영역이 본문보다 넓음 */
 	.prose,
 	.pager {
 		max-width: 40rem;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	@media (max-width: 68rem) {
 		.reading {
-			grid-template-columns: minmax(0, 46rem);
-			justify-content: center;
+			grid-template-columns: 1fr;
+			max-width: 52rem;
 		}
 		.side {
 			display: none;
