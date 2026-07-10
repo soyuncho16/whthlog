@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionLanding from '../../components/SectionLanding.astro';
+import { SECTIONS } from '../../lib/taxonomy';
+
+export async function getStaticPaths() {
+	const posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+	return SECTIONS.flatMap((s) =>
+		s.subsections.map((sub) => ({
+			params: { section: s.key, subsection: sub.key },
+			props: {
+				heading: `${s.label} › ${sub.label}`,
+				blurb: s.blurb,
+				posts: posts
+					.filter((p) => p.data.section === s.key && p.data.subsection === sub.key)
+					.map((p) => ({
+						id: p.id,
+						title: p.data.title,
+						section: p.data.section,
+						subsection: p.data.subsection,
+						cs_area: p.data.cs_area,
+						concept: p.data.concept,
+						pubDate: p.data.pubDate,
+					})),
+			},
+		})),
+	);
+}
+const { heading, blurb, posts } = Astro.props;
+---
+
+<BaseLayout title={`${heading} · whthlog`} description={blurb} wide>
+	<SectionLanding heading={heading} blurb={blurb} posts={posts} />
+</BaseLayout>

@@ -1,0 +1,74 @@
+---
+import PostCard from './PostCard.astro';
+
+interface Props {
+	heading: string;
+	blurb: string;
+	posts: {
+		id: string;
+		title: string;
+		section: string;
+		subsection: string;
+		cs_area?: string[];
+		concept?: string[];
+		pubDate: Date;
+	}[];
+}
+const { heading, blurb, posts } = Astro.props;
+---
+
+<section class="landing">
+	<header class="lead reveal">
+		<h1><span class="u-underline">{heading}</span></h1>
+		<p class="blurb">{blurb}</p>
+	</header>
+
+	{
+		posts.length > 0 ? (
+			<div class="grid">
+				{posts.map((p) => (
+					<PostCard
+						id={p.id}
+						title={p.title}
+						section={p.section}
+						subsection={p.subsection}
+						cs_area={p.cs_area}
+						concept={p.concept}
+						pubDate={p.pubDate}
+					/>
+				))}
+			</div>
+		) : (
+			<p class="empty reveal">아직 준비 중인 섹션입니다. 곧 채워집니다.</p>
+		)
+	}
+</section>
+
+<style>
+	.landing {
+		padding: 1.5em 0 2em;
+	}
+	.lead {
+		margin-bottom: 2em;
+	}
+	.lead h1 {
+		font-size: 1.9em;
+		margin: 0 0 0.4em;
+	}
+	.blurb {
+		color: var(--ink-soft);
+		margin: 0;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+		gap: 1.25em;
+	}
+	.empty {
+		color: var(--ink-soft);
+		padding: 3em 0;
+		text-align: center;
+		border: 1px dashed var(--line);
+		border-radius: var(--radius);
+	}
+</style>
