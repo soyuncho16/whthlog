@@ -126,10 +126,8 @@ const subCounts = countBySubsection(await getCollection('blog'));
 <style>
 	/* inpa 참고: 왼쪽 사이드바(넓은 화면만) + 아티클. 헤더는 아티클 폭 전체, 본문은 읽기 폭으로 좁게. */
 	.reading {
-		max-width: 84rem;
-		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 15rem 1fr;
+		grid-template-columns: 15rem minmax(0, 1fr);
 		gap: 2.5rem;
 		align-items: start;
 	}
@@ -138,23 +136,23 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	}
 	article {
 		min-width: 0;
-		max-width: 52rem;
-		margin: 0 auto;
 	}
-	/* 제목칸(post-head)은 아티클 폭 52rem 전체, 본문·네비는 읽기폭 40rem 중앙정렬 → 제목 영역이 본문보다 넓음 */
+	/* 제목칸(post-head)은 사이드바 오른쪽부터 창 오른쪽 끝까지(콘텐츠 영역 전체), 본문은 읽기폭으로 왼쪽 정렬 */
 	.prose,
 	.pager {
-		max-width: 40rem;
-		margin-left: auto;
-		margin-right: auto;
+		max-width: 44rem;
 	}
 	@media (max-width: 68rem) {
 		.reading {
 			grid-template-columns: 1fr;
-			max-width: 52rem;
 		}
 		.side {
 			display: none;
+		}
+		.prose,
+		.pager {
+			margin-left: auto;
+			margin-right: auto;
 		}
 	}
 	.crumb {
