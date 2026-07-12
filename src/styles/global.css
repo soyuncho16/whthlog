@@ -25,6 +25,7 @@
 	--card-shadow: 0 1px 2px rgba(33, 32, 28, 0.04), 0 4px 12px rgba(33, 32, 28, 0.05);
 	--card-shadow-hover: 0 2px 6px rgba(33, 32, 28, 0.08), 0 12px 28px rgba(33, 32, 28, 0.1);
 	--bar-bg: rgba(253, 253, 251, 0.82);
+	--band-dot: rgba(33, 32, 28, 0.09); /* 제목 밴드 도트그리드 (라이트) */
 	--hero-grad: radial-gradient(120% 120% at 100% 0%, #e4efe9 0%, var(--bg) 55%);
 	--mono: 'JetBrains Mono', 'Pretendard Variable', monospace;
 }
@@ -48,6 +49,7 @@
 	--card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.28);
 	--card-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.42);
 	--bar-bg: rgba(25, 25, 24, 0.82);
+	--band-dot: rgba(216, 213, 208, 0.08); /* 제목 밴드 도트그리드 (다크) */
 	--hero-grad: radial-gradient(120% 120% at 100% 0%, #26221a 0%, var(--bg) 55%);
 }
 

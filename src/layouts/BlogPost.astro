@@ -88,7 +88,6 @@ const subCounts = countBySubsection(await getCollection('blog'));
 					{(concept ?? []).map((c) => <span class="chip">{c}</span>)}
 					{status && <span class="chip">{status}</span>}
 				</div>
-				<hr />
 			</header>
 			{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 			<div class="prose">
@@ -157,9 +156,15 @@ const subCounts = countBySubsection(await getCollection('blog'));
 			display: none;
 		}
 	}
-	/* 제목·메타 등 헤더 내용은 넓은 제목칸 안에서 중앙정렬 */
+	/* 제목 밴드: 콘텐츠 폭 전체를 도트그리드 + sand 톤으로 채워 헤더를 구분 (터미널 모티프). 내용은 중앙정렬 */
 	.post-head {
 		text-align: center;
+		padding: 2rem 1.5rem 1.6rem;
+		margin-bottom: 1.9rem;
+		background:
+			radial-gradient(circle, var(--band-dot) 1px, transparent 1.2px) 0 0 / 14px 14px,
+			var(--bg-tint);
+		border-bottom: 1px solid var(--line);
 	}
 	.crumb {
 		display: flex;
@@ -168,6 +173,12 @@ const subCounts = countBySubsection(await getCollection('blog'));
 		font-size: 0.85em;
 		color: var(--ink-soft);
 		font-family: var(--mono);
+	}
+	/* 터미널 프롬프트 */
+	.crumb::before {
+		content: '$';
+		color: var(--accent);
+		font-weight: 700;
 	}
 	.crumb a {
 		color: var(--ink-soft);
@@ -200,9 +211,6 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	.chip.area {
 		color: var(--card-accent);
 		border-color: color-mix(in srgb, var(--card-accent) 40%, var(--line));
-	}
-	.post-head hr {
-		margin: 1.2em 0 1.5em;
 	}
 	.pager {
 		display: flex;
