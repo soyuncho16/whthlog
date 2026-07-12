@@ -2,6 +2,8 @@
 title: '강제 종료가 깨뜨린 Discord 싱글톤 락'
 description: 'Discord 업데이트 삽질이 "A JavaScript error occurred in the main process"로 끝났다. 증상이 네 번 바뀌는 동안 진짜 원인은 프로세스 싱글톤 락이었고, 강제 종료가 남긴 락·소켓 파일을 지워서 풀었다'
 pubDate: 'Jun 25 2026'
+section: cs
+subsection: troubleshooting
 cs_area: [os]
 concept: [process-singleton, mutex, lock-file, unix-domain-socket, SIGKILL, atomic-symlink]
 status: resolved

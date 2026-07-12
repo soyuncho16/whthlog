@@ -1,0 +1,130 @@
+---
+import { base } from '../lib/url';
+import { areaMeta, subsectionLabel } from '../lib/taxonomy';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	id: string;
+	title: string;
+	section: string;
+	subsection: string;
+	cs_area?: string[];
+	concept?: string[];
+	pubDate: Date;
+	featured?: boolean;
+}
+const { id, title, section, subsection, cs_area, concept, pubDate, featured } = Astro.props;
+
+const areas = cs_area ?? [];
+// 카드 밑줄: 영역이 여럿이면 각 영역 색을 잇는 그라디언트, 하나면 그 색, 없으면 브랜드.
+const areaVars = areas
+	.map((a) => areaMeta(a)?.cssVar)
+	.filter((v): v is string => Boolean(v));
+const ruleBg =
+	areaVars.length >= 2
+		? `linear-gradient(90deg, ${areaVars.map((v) => `var(${v})`).join(', ')})`
+		: areaVars.length === 1
+			? `var(${areaVars[0]})`
+			: 'var(--accent)';
+const label = subsectionLabel(section, subsection);
+---
+
+<article
+	class:list={['card', 'reveal', { featured }]}
+	data-areas={areas.join(' ')}
+	style={`--card-accent: ${ruleBg}`}
+>
+	<a class="hit" href={`${base}blog/${id}/`} aria-label={title}></a>
+	<div class="cat">
+		<span class="cat-label">{label}</span>
+		<span class="cat-rule"></span>
+	</div>
+	<h3 class="title">{title}</h3>
+	{
+		(concept ?? []).length > 0 && (
+			<div class="concepts">
+				{(concept ?? []).slice(0, featured ? 6 : 3).map((c) => (
+					<span class="concept">{c}</span>
+				))}
+			</div>
+		)
+	}
+	<FormattedDate date={pubDate} />
+</article>
+
+<style>
+	.card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		padding: 1.25em 1.35em 1.35em;
+		background: var(--bg);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		box-shadow: var(--card-shadow);
+		transition:
+			transform 0.18s ease,
+			box-shadow 0.18s ease,
+			border-color 0.18s ease;
+	}
+	.card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--card-shadow-hover);
+		border-color: var(--ink-soft);
+	}
+	/* 카드 전체를 클릭 타깃으로 (텍스트 선택은 유지) */
+	.hit {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		border-radius: inherit;
+	}
+	.cat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+	}
+	.cat-label {
+		font-family: var(--mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.03em;
+		color: var(--ink-soft);
+	}
+	.cat-rule {
+		width: 2.2em;
+		height: 3px;
+		border-radius: 3px;
+		background: var(--card-accent);
+	}
+	.title {
+		margin: 0;
+		font-size: 1.15em;
+		line-height: 1.4;
+		color: var(--ink);
+	}
+	.card:hover .title {
+		color: var(--accent);
+	}
+	.concepts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35em;
+	}
+	.concept {
+		font-family: var(--mono);
+		font-size: 0.68rem;
+		padding: 1px 8px;
+		border-radius: 999px;
+		background: var(--bg-tint);
+		border: 1px solid var(--line);
+		color: var(--ink-soft);
+	}
+	.featured {
+		gap: 0.7em;
+		padding: 1.8em 1.9em 1.9em;
+	}
+	.featured .title {
+		font-size: 1.5em;
+	}
+</style>

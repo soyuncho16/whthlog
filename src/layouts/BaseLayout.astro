@@ -1,0 +1,42 @@
+---
+import type { ImageMetadata } from 'astro';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+	wide?: boolean;
+	full?: boolean;
+}
+const { title, description, image, wide, full } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={description} image={image} />
+	</head>
+	<body>
+		<Header />
+		<main class:list={[{ wide, full }]}>
+			<slot />
+		</main>
+		<Footer />
+		<ScrollReveal />
+	</body>
+</html>
+
+<style is:global>
+	main.wide {
+		max-width: 72rem;
+	}
+	main.full {
+		max-width: none;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+	}
+</style>

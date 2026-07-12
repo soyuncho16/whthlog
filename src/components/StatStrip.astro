@@ -1,0 +1,62 @@
+---
+interface Props {
+	postCount: number;
+	conceptCount: number;
+	sectionCount: number;
+}
+const { postCount, conceptCount, sectionCount } = Astro.props;
+const items = [
+	{ n: postCount, label: '글' },
+	{ n: conceptCount, label: '고유 개념' },
+	{ n: sectionCount, label: '섹션' },
+];
+---
+
+<section class="stats reveal">
+	{
+		items.map((it) => (
+			<div class="stat">
+				<span class="num">{it.n}</span>
+				<span class="label">{it.label}</span>
+			</div>
+		))
+	}
+</section>
+
+<style>
+	.stats {
+		display: flex;
+		gap: 1em;
+		margin: 0 0 2.5em;
+	}
+	.stat {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15em;
+		padding: 1.1em 1.3em;
+		background: var(--bg-tint);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+	}
+	.num {
+		font-family: var(--mono);
+		font-size: 1.6em;
+		font-weight: 700;
+		color: var(--accent); /* 폴백 (background-clip 미지원 시) */
+		background: var(--accent-grad);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		line-height: 1;
+	}
+	.label {
+		font-size: 0.85em;
+		color: var(--ink-soft);
+	}
+	@media (max-width: 520px) {
+		.num {
+			font-size: 1.35em;
+		}
+	}
+</style>

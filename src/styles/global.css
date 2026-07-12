@@ -2,7 +2,7 @@
   whthlog 디자인 토큰 & 베이스.
   뼈대: Bear Blog default.css (MIT) — https://github.com/HermanMartinus/bearblog
   색: Radix Colors sand/amber 스케일 발췌 (MIT) — https://www.radix-ui.com/colors
-  타이포: Pretendard Variable (OFL) + KRDS 본문 컨벤션 (17px, lh 1.75, keep-all)
+  타이포: IBM Plex Sans KR (OFL) 본문·제목 + JetBrains Mono, KRDS 본문 컨벤션 (15.5px, lh 1.8, keep-all)
 */
 
 :root {
@@ -11,8 +11,22 @@
 	--ink: #21201c; /* sand 12 */
 	--ink-soft: #63635e; /* sand 11 */
 	--line: #e6e4df; /* sand 6 */
-	--accent: #ab6400; /* amber 11 — 본문 위 가독 확보 */
-	--accent-tint: #fdf6e3; /* aside 배경 */
+	--accent: #1f6f8b; /* teal — 라이트 메인색 (본문 위 가독 확보) */
+	--accent-tint: #edf5f6; /* aside 배경 (teal wash) */
+	--accent-grad: linear-gradient(100deg, #1f6f8b 0%, #2f7d78 45%, #276749 100%); /* 채움 요소: 청록→깊은초록 */
+	/* cs_area 색 (라이트) — 청록→초록 브랜드와 충돌 없게 재조정 */
+	--area-os: #a5532b; /* 구리/코퍼 */
+	--area-arch: #7b53b3; /* 보라 */
+	--area-network: #3f5fb0; /* 슬레이트 블루 */
+	--area-data-structures: #8f7519; /* 브래스/골드 */
+	--area-algorithms: #b0507e; /* 로즈 */
+	/* 포털 표면 토큰 */
+	--radius: 12px;
+	--card-shadow: 0 1px 2px rgba(33, 32, 28, 0.04), 0 4px 12px rgba(33, 32, 28, 0.05);
+	--card-shadow-hover: 0 2px 6px rgba(33, 32, 28, 0.08), 0 12px 28px rgba(33, 32, 28, 0.1);
+	--bar-bg: rgba(253, 253, 251, 0.82);
+	--band-dot: rgba(33, 32, 28, 0.09); /* 제목 밴드 도트그리드 (라이트) */
+	--hero-grad: radial-gradient(120% 120% at 100% 0%, #e4efe9 0%, var(--bg) 55%);
 	--mono: 'JetBrains Mono', 'Pretendard Variable', monospace;
 }
 
@@ -24,17 +38,30 @@
 	--line: #3b3a36;
 	--accent: #f0b429; /* amber dark */
 	--accent-tint: #26221a;
+	--accent-grad: var(--accent); /* 다크는 앰버 단색 유지 (채움 요소도 solid) */
+	/* cs_area 색 (다크 — 밝게 보정) */
+	--area-os: #e0965c; /* 구리/코퍼 */
+	--area-arch: #b18ae8; /* 보라 */
+	--area-network: #8fa4e0; /* 슬레이트 블루 */
+	--area-data-structures: #cdb24d; /* 브래스/골드 */
+	--area-algorithms: #e88ab5; /* 로즈 */
+	/* 포털 표면 토큰 (다크) */
+	--card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.28);
+	--card-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.42);
+	--bar-bg: rgba(25, 25, 24, 0.82);
+	--band-dot: rgba(216, 213, 208, 0.08); /* 제목 밴드 도트그리드 (다크) */
+	--hero-grad: radial-gradient(120% 120% at 100% 0%, #26221a 0%, var(--bg) 55%);
 }
 
 body {
 	font-family:
-		'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo',
+		'IBM Plex Sans KR', -apple-system, 'Apple SD Gothic Neo',
 		'Noto Sans KR', sans-serif;
 	margin: 0;
 	background: var(--bg);
 	color: var(--ink);
-	font-size: 17px;
-	line-height: 1.75;
+	font-size: 15.5px;
+	line-height: 1.8;
 	word-break: keep-all;
 	overflow-wrap: break-word;
 }
@@ -54,16 +81,18 @@ h6 {
 	margin: 1.6em 0 0.5em;
 	line-height: 1.35;
 	font-weight: 700;
+	/* 앵커/목차 클릭 시 스티키 상단바에 가리지 않도록 여백 확보 */
+	scroll-margin-top: 4.5rem;
 }
 h1 {
-	font-size: 1.7em;
+	font-size: 1.87em;
 	margin-top: 0.4em;
 }
 h2 {
-	font-size: 1.35em;
+	font-size: 1.42em;
 }
 h3 {
-	font-size: 1.15em;
+	font-size: 1.16em;
 }
 h4,
 h5,
@@ -195,4 +224,42 @@ button.chip:disabled {
 	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	white-space: nowrap;
+}
+
+/* 스크롤 진입 애니메이션 — ScrollReveal 스크립트가 .in 을 붙인다 */
+.reveal {
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity 0.5s ease,
+		transform 0.5s ease;
+	will-change: opacity, transform;
+}
+.reveal.in {
+	opacity: 1;
+	transform: none;
+}
+
+/* 섹션 헤더 브랜드 언더라인 액센트 (청록→깊은초록) */
+.u-underline {
+	position: relative;
+	display: inline-block;
+}
+.u-underline::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -0.15em;
+	height: 3px;
+	border-radius: 3px;
+	background: var(--accent-grad);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
 }

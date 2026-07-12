@@ -1,0 +1,149 @@
+---
+// 우하단 플로팅 목차. 본문 article 의 h2/h3 를 클라이언트에서 수집해 렌더.
+---
+
+<div id="floating-toc" class="toc" data-state="open">
+	<button class="toc-head" aria-expanded="true" aria-controls="toc-body">
+		<span class="toc-title">목차</span>
+		<span class="toc-caret">▾</span>
+	</button>
+	<nav id="toc-body" class="toc-body" aria-label="목차"></nav>
+</div>
+
+<script>
+	const toc = document.getElementById('floating-toc');
+	const body = document.getElementById('toc-body');
+	const head = toc?.querySelector<HTMLButtonElement>('.toc-head');
+	const article = document.querySelector('article');
+	if (toc && body && head && article) {
+		const headings = [...article.querySelectorAll<HTMLElement>('h2, h3')].filter(
+			(h) => h.id,
+		);
+
+		if (headings.length < 2) {
+			toc.remove();
+		} else {
+			// 목차 링크 생성
+			const links = new Map<string, HTMLAnchorElement>();
+			for (const h of headings) {
+				const a = document.createElement('a');
+				a.href = `#${h.id}`;
+				a.textContent = h.textContent;
+				a.className = h.tagName === 'H3' ? 'lvl3' : 'lvl2';
+				body.appendChild(a);
+				links.set(h.id, a);
+			}
+
+			// 펼침/접힘 토글 (body[data-toc] 로 본문 폭 제어)
+			const setState = (open: boolean) => {
+				toc.dataset.state = open ? 'open' : 'closed';
+				head.setAttribute('aria-expanded', String(open));
+				document.body.dataset.toc = open ? 'open' : 'closed';
+			};
+			setState(true);
+			head.addEventListener('click', () => setState(toc.dataset.state !== 'open'));
+
+			// active 갱신
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const e of entries) {
+						if (!e.isIntersecting) continue;
+						links.forEach((a) => a.classList.remove('active'));
+						links.get(e.target.id)?.classList.add('active');
+					}
+				},
+				{ rootMargin: '0px 0px -70% 0px', threshold: 0 },
+			);
+			headings.forEach((h) => io.observe(h));
+		}
+	}
+</script>
+
+<style>
+	.toc {
+		position: fixed;
+		right: 1.5rem;
+		bottom: 1.5rem;
+		z-index: 40;
+		width: 16rem;
+		max-height: 60vh;
+		display: flex;
+		flex-direction: column;
+		background: var(--bar-bg);
+		backdrop-filter: saturate(180%) blur(12px);
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		box-shadow: var(--card-shadow-hover);
+		overflow: hidden;
+		transition:
+			width 0.25s ease,
+			border-radius 0.25s ease;
+	}
+	.toc-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5em;
+		padding: 0.7em 1em;
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: var(--ink);
+		font: inherit;
+		font-weight: 650;
+		font-size: 0.9em;
+	}
+	.toc-caret {
+		transition: transform 0.25s ease;
+		color: var(--ink-soft);
+	}
+	.toc-body {
+		display: flex;
+		flex-direction: column;
+		padding: 0 0.5em 0.7em;
+		overflow-y: auto;
+	}
+	/* 목차 링크는 JS 로 동적 생성 → 스코프 속성이 없으므로 :global 로 적용 */
+	.toc-body :global(a) {
+		display: block;
+		padding: 0.3em 0.7em 0.3em 1.4em;
+		border-radius: 6px;
+		color: var(--ink-soft);
+		text-decoration: none;
+		font-size: 0.8em;
+		line-height: 1.4;
+		border-left: 2px solid transparent;
+	}
+	.toc-body :global(a.lvl3) {
+		padding-left: 2.4em;
+		font-size: 0.75em;
+	}
+	.toc-body :global(a:hover) {
+		color: var(--ink);
+		background: var(--bg-tint);
+	}
+	.toc-body :global(a.active) {
+		color: var(--ink);
+		border-left-color: var(--ink-soft);
+		background: var(--bg-tint);
+		font-weight: 600;
+	}
+	/* 접힘 = 알약 */
+	.toc[data-state='closed'] {
+		width: auto;
+		border-radius: 999px;
+	}
+	.toc[data-state='closed'] .toc-body {
+		display: none;
+	}
+	.toc[data-state='closed'] .toc-caret {
+		transform: rotate(180deg);
+	}
+	@media (max-width: 640px) {
+		.toc {
+			right: 1rem;
+			bottom: 1rem;
+			width: 13rem;
+		}
+	}
+</style>

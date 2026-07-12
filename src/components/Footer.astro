@@ -1,28 +1,128 @@
 ---
 import { base } from '../lib/url';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SECTIONS } from '../lib/taxonomy';
 
 const today = new Date();
 ---
 
 <footer>
-	<span>© {today.getFullYear()} whth</span>
-	<span>·</span>
-	<a href="https://github.com/soyuncho16" target="_blank" rel="noopener">GitHub</a>
-	<span>·</span>
-	<a href={`${base}rss.xml`}>RSS</a>
+	<div class="cols">
+		<div class="brand-col">
+			<a class="brand" href={base}>{SITE_TITLE}</a>
+			<p class="blurb">{SITE_DESCRIPTION}</p>
+		</div>
+
+		<nav class="col">
+			<h3>섹션</h3>
+			<ul>
+				{
+					SECTIONS.map((s) => (
+						<li>
+							<a href={`${base}${s.key}/`}>{s.label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<nav class="col">
+			<h3>사이트</h3>
+			<ul>
+				<li><a href={`${base}about/`}>소개</a></li>
+				<li><a href={base}>전체 글</a></li>
+				<li><a href={`${base}rss.xml`}>RSS</a></li>
+			</ul>
+		</nav>
+
+		<nav class="col">
+			<h3>링크</h3>
+			<ul>
+				<li>
+					<a href="https://github.com/soyuncho16/whthlog" target="_blank" rel="noopener">
+						GitHub
+					</a>
+				</li>
+				<li>
+					<a
+						href="https://github.com/soyuncho16/whthlog/discussions"
+						target="_blank"
+						rel="noopener"
+					>
+						댓글(giscus)
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+	<div class="baseline">
+		<span>© {today.getFullYear()} whth</span>
+	</div>
 </footer>
+
 <style>
 	footer {
-		max-width: 68ch;
-		margin: 0 auto;
-		padding: 1.5em 1em 3em;
 		border-top: 1px solid var(--line);
+		background: var(--bg-tint);
 		color: var(--ink-soft);
-		font-size: 0.85em;
+		font-size: 0.9em;
+	}
+	.cols {
+		max-width: 72rem;
+		margin: 0 auto;
+		padding: 3em 1.25em 2em;
+		display: grid;
+		grid-template-columns: 2fr 1fr 1fr 1fr;
+		gap: 2em;
+	}
+	.brand {
+		font-weight: 700;
+		font-size: 1.1em;
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.blurb {
+		margin: 0.6em 0 0;
+		max-width: 28ch;
+		line-height: 1.6;
+	}
+	.col h3 {
+		margin: 0 0 0.8em;
+		font-size: 0.8em;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+	.col ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
 		display: flex;
+		flex-direction: column;
 		gap: 0.5em;
 	}
-	footer a {
+	.col a {
 		color: var(--ink-soft);
+		text-decoration: none;
+	}
+	.col a:hover {
+		color: var(--accent);
+	}
+	.baseline {
+		max-width: 72rem;
+		margin: 0 auto;
+		padding: 1.2em 1.25em 2.5em;
+		border-top: 1px solid var(--line);
+		font-size: 0.85em;
+	}
+	@media (max-width: 720px) {
+		.cols {
+			grid-template-columns: 1fr 1fr;
+			gap: 1.5em 1em;
+		}
+		.brand-col {
+			grid-column: 1 / -1;
+		}
 	}
 </style>

@@ -1,0 +1,136 @@
+---
+import { base } from '../lib/url';
+import { SECTIONS } from '../lib/taxonomy';
+
+interface Props {
+	subsectionCounts: Record<string, number>;
+}
+const { subsectionCounts } = Astro.props;
+---
+
+<aside class="sidebar">
+	<div class="card about reveal">
+		<div class="avatar" aria-hidden="true">wt</div>
+		<p class="bio">
+			연구하다 만난 문제를 CS 기초로 되짚어 푸는 기록. VIO 비교 연구와 ROS2·Docker
+			인프라에서 나온 사건들.
+		</p>
+		<div class="links">
+			<a href="https://github.com/soyuncho16" target="_blank" rel="noopener">GitHub</a>
+			<a href={`${base}rss.xml`}>RSS</a>
+		</div>
+	</div>
+
+	<nav class="card tree reveal" aria-label="카테고리">
+		<h3>카테고리</h3>
+		<ul class="sections">
+			{
+				SECTIONS.map((s) => (
+					<li>
+						<a class="sec" href={`${base}${s.key}/`}>
+							{s.label}
+						</a>
+						<ul>
+							{s.subsections.map((sub) => {
+								const n = subsectionCounts[`${s.key}/${sub.key}`] ?? 0;
+								return (
+									<li>
+										<a href={`${base}${s.key}/${sub.key}/`}>
+											<span>{sub.label}</span>
+											<span class="count">{n}</span>
+										</a>
+									</li>
+								);
+							})}
+						</ul>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</aside>
+
+<style>
+	.sidebar {
+		position: sticky;
+		top: 4.5rem;
+		/* 뷰포트에 고정 + 사이드바가 길어지면 사이드바만 따로 스크롤 */
+		max-height: calc(100vh - 5.5rem);
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25em;
+		align-self: start;
+	}
+	.card {
+		background: var(--bg);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		padding: 1.3em;
+		box-shadow: var(--card-shadow);
+	}
+	.card h3 {
+		margin: 0 0 0.9em;
+		font-size: 0.8em;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+	.avatar {
+		width: 3em;
+		height: 3em;
+		border-radius: 50%;
+		display: grid;
+		place-items: center;
+		font-family: var(--mono);
+		font-weight: 700;
+		color: var(--bg);
+		background: var(--accent-grad);
+		margin-bottom: 0.8em;
+	}
+	.bio {
+		margin: 0 0 1em;
+		font-size: 0.9em;
+		color: var(--ink-soft);
+		line-height: 1.6;
+	}
+	.about .links {
+		display: flex;
+		gap: 1em;
+		font-size: 0.9em;
+	}
+	.tree ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.tree .sections > li {
+		margin-bottom: 0.7em;
+	}
+	.tree .sec {
+		font-weight: 650;
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.tree .sections ul {
+		margin: 0.35em 0 0;
+		padding-left: 0.8em;
+		border-left: 1px solid var(--line);
+	}
+	.tree .sections ul a {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.2em 0;
+		color: var(--ink-soft);
+		text-decoration: none;
+		font-size: 0.92em;
+	}
+	.tree .sections ul a:hover {
+		color: var(--accent);
+	}
+	.count {
+		font-family: var(--mono);
+		font-size: 0.85em;
+		opacity: 0.7;
+	}
+</style>
