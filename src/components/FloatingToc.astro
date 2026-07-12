@@ -103,7 +103,9 @@
 		padding: 0 0.5em 0.7em;
 		overflow-y: auto;
 	}
-	.toc-body a {
+	/* 목차 링크는 JS 로 동적 생성 → 스코프 속성이 없으므로 :global 로 적용 */
+	.toc-body :global(a) {
+		display: block;
 		padding: 0.3em 0.7em 0.3em 1.4em;
 		border-radius: 6px;
 		color: var(--ink-soft);
@@ -112,15 +114,15 @@
 		line-height: 1.4;
 		border-left: 2px solid transparent;
 	}
-	.toc-body a.lvl3 {
+	.toc-body :global(a.lvl3) {
 		padding-left: 2.4em;
 		font-size: 0.75em;
 	}
-	.toc-body a:hover {
+	.toc-body :global(a:hover) {
 		color: var(--ink);
 		background: var(--bg-tint);
 	}
-	.toc-body a.active {
+	.toc-body :global(a.active) {
 		color: var(--ink);
 		border-left-color: var(--ink-soft);
 		background: var(--bg-tint);

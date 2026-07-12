@@ -125,11 +125,11 @@ const subCounts = countBySubsection(await getCollection('blog'));
 
 <style>
 	/* inpa 참고: 왼쪽 사이드바(넓은 화면만) + 아티클. 헤더는 아티클 폭 전체, 본문은 읽기 폭으로 좁게. */
+	/* align-items 기본(stretch): 사이드바 칸이 기사 높이만큼 늘어나 sticky 가 제대로 동작 */
 	.reading {
 		display: grid;
 		grid-template-columns: 15rem minmax(0, 1fr);
 		gap: 2.5rem;
-		align-items: start;
 	}
 	.side {
 		min-width: 0;
@@ -137,10 +137,17 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	article {
 		min-width: 0;
 	}
-	/* 제목칸(post-head)은 사이드바 오른쪽부터 창 오른쪽 끝까지(콘텐츠 영역 전체), 본문은 읽기폭으로 왼쪽 정렬 */
+	/* 제목칸(post-head)은 콘텐츠 영역 전체 폭. 본문·네비·댓글·히어로는 읽기폭 44rem 로 중앙정렬 */
 	.prose,
-	.pager {
+	.pager,
+	article > :global(img),
+	article :global(.comments) {
 		max-width: 44rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	article > :global(img) {
+		display: block;
 	}
 	@media (max-width: 68rem) {
 		.reading {
@@ -149,14 +156,14 @@ const subCounts = countBySubsection(await getCollection('blog'));
 		.side {
 			display: none;
 		}
-		.prose,
-		.pager {
-			margin-left: auto;
-			margin-right: auto;
-		}
+	}
+	/* 제목·메타 등 헤더 내용은 넓은 제목칸 안에서 중앙정렬 */
+	.post-head {
+		text-align: center;
 	}
 	.crumb {
 		display: flex;
+		justify-content: center;
 		gap: 0.5em;
 		font-size: 0.85em;
 		color: var(--ink-soft);
@@ -174,6 +181,7 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	}
 	.meta {
 		display: flex;
+		justify-content: center;
 		align-items: baseline;
 		gap: 0.5em;
 		color: var(--ink-soft);
@@ -184,6 +192,7 @@ const subCounts = countBySubsection(await getCollection('blog'));
 	}
 	.post-head .chips {
 		display: flex;
+		justify-content: center;
 		flex-wrap: wrap;
 		gap: 6px;
 		margin: 1em 0 0;
