@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { sortBlogPosts } from './posts';
+import { getReadingOrderPosts, sortBlogPosts } from './posts';
 
 describe('sortBlogPosts', () => {
 	it('sorts newest posts first and keeps same-day series in explicit order', () => {
@@ -20,5 +20,15 @@ describe('sortBlogPosts', () => {
 		] as any;
 
 		expect(sortBlogPosts(posts).map((p) => p.id)).toEqual(['x', 'y']);
+	});
+
+	it('keeps reading-order navigation in the natural series sequence for same-day posts', () => {
+		const posts = [
+			{ id: 'p3', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 3 } },
+			{ id: 'p1', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 1 } },
+			{ id: 'p2', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 2 } },
+		] as any;
+
+		expect(getReadingOrderPosts(posts).map((p) => p.id)).toEqual(['p1', 'p2', 'p3']);
 	});
 });
