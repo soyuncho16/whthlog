@@ -1,22 +1,5 @@
-import { SECTIONS } from './taxonomy';
-
 export interface PostLike {
 	data: { concept?: string[]; section?: string; subsection?: string };
-}
-export interface Stats {
-	postCount: number;
-	conceptCount: number;
-	sectionCount: number;
-}
-
-export function computeStats(posts: PostLike[]): Stats {
-	const concepts = new Set<string>();
-	for (const p of posts) for (const c of p.data.concept ?? []) concepts.add(c);
-	return {
-		postCount: posts.length,
-		conceptCount: concepts.size,
-		sectionCount: SECTIONS.length,
-	};
 }
 
 export function countBySubsection(posts: PostLike[]): Record<string, number> {

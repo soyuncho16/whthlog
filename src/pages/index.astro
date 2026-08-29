@@ -2,16 +2,14 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import StatStrip from '../components/StatStrip.astro';
 import PostCard from '../components/PostCard.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { CS_AREAS } from '../lib/taxonomy';
-import { computeStats, countBySubsection } from '../lib/stats';
+import { countBySubsection } from '../lib/stats';
 import { sortBlogPosts } from '../lib/posts';
 
 const posts = sortBlogPosts(await getCollection('blog'));
-const stats = computeStats(posts);
 const subCounts = countBySubsection(posts);
 
 const [featured, ...rest] = posts;
@@ -21,11 +19,6 @@ const areaCount = (area: string) =>
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} wide>
 	<Hero latestId={featured?.id} />
-	<StatStrip
-		postCount={stats.postCount}
-		conceptCount={stats.conceptCount}
-		sectionCount={stats.sectionCount}
-	/>
 
 	<div class="layout" id="recent">
 		<div class="content">
