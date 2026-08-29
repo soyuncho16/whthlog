@@ -15,6 +15,7 @@ const blog = defineCollection({
 				// Transform string to Date object
 				pubDate: z.coerce.date(),
 				updatedDate: z.coerce.date().optional(),
+				seriesOrder: z.number().int().nonnegative().optional(),
 				heroImage: z.optional(image()),
 				// 부문 분류 (기본값으로 최소 frontmatter·기존 글 비파괴)
 				section: z.enum(['cs', 'dev', 'paper']).default('cs'),

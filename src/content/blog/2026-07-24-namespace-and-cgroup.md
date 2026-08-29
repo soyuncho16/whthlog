@@ -2,6 +2,7 @@
 title: '컨테이너 격리의 두 축: namespace와 cgroup'
 description: 'namespace는 프로세스에게 어느 장부를 보여줄지 정하고, cgroup은 자원을 얼마나 쓸지 조른다. PID/네트워크/IPC/마운트 격리를 inode로 확인하고 메모리 제한을 OOM으로 확인한 공부 기록'
 pubDate: 'Jul 24 2026'
+seriesOrder: 2
 section: cs
 subsection: study
 cs_area: [os]

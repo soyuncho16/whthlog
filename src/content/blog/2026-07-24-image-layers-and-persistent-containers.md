@@ -2,6 +2,7 @@
 title: 'overlayfs와 쓰기 레이어: persistent 컨테이너의 정체'
 description: '도커 이미지가 읽기전용 레이어 스택이고 컨테이너가 그 위에 자기 쓰기 레이어를 얹는다는 걸 overlayfs로 확인하고, persistent 컨테이너가 왜 --rm 안 한 것뿐인지 stop/start로 확인한 공부 기록'
 pubDate: 'Jul 24 2026'
+seriesOrder: 3
 section: cs
 subsection: study
 cs_area: [os]

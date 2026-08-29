@@ -2,10 +2,11 @@ import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { excerpt } from '../lib/excerpt';
+import { sortBlogPosts } from '../lib/posts';
 import { base } from '../lib/url';
 
 export async function GET(context) {
-	const posts = await getCollection('blog');
+	const posts = sortBlogPosts(await getCollection('blog'));
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,

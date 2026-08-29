@@ -2,6 +2,7 @@
 title: '컨테이너는 격리된 리눅스 프로세스 하나: docker run 명령어 해부'
 description: 'VM인 줄 알았던 도커 컨테이너가 사실은 커널을 공유하는 격리된 프로세스라는 걸 매일 쓰는 VIO 실행 명령어를 바닥까지 뜯어 확인한 공부 기록'
 pubDate: 'Jul 24 2026'
+seriesOrder: 1
 section: cs
 subsection: study
 cs_area: [os]
