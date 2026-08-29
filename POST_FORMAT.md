@@ -8,7 +8,8 @@
 ---
 title: <증상: CS 개념 한 줄. em dash(—) 금지>
 description: <한 줄>
-pubDate: '<Mon DD YYYY>'
+pubDate: '<YYYY-MM-DDTHH:MM:SS+09:00>'                          # 시각까지. 발행 시점의 date +%FT%T%:z
+seriesOrder: <1, 2, 3 ...>                                      # 시각을 모를 때만. 같은 날 안의 순서
 cs_area: [os | arch | network | data-structures | algorithms]   # 1개 이상
 concept: [bounded buffer, page cache, ...]                       # 구체 개념
 status: resolved | partial | resolved-negative
@@ -19,6 +20,14 @@ stack: [ros2, docker, ...]
 `cs_area`·`concept`·`status`·`stack` 은 전부 optional 이라 일반 글도 같은 컬렉션에 들어간다. 트러블슈팅 포스트는 넷 다 채운다.
 
 최소 frontmatter 는 `title` + `pubDate` 2줄 (`description` 도 optional, 없으면 본문에서 자동 발췌).
+
+### 글 순서는 시각 하나로 정한다
+
+목록(메인·섹션·RSS)은 최신 글 먼저, 글 안의 이전/다음은 시간순이다. 둘 다 같은 축을 쓴다: `pubDate` 시각 → 같으면 `seriesOrder` → 같으면 파일명. 그래서 하루에 여러 편을 올리면 순서가 갈리도록 반드시 둘 중 하나를 준다.
+
+- 기본: `pubDate` 에 시각까지 쓴다. `'2026-07-24T14:30:00+09:00'`. 시리즈면 1편이 가장 이른 시각.
+- 시각을 모르거나 일부러 같은 시각으로 두고 싶으면 `seriesOrder: 1, 2, 3`. 한 칸 = 1분으로 계산되고 같은 날 안에서만 의미가 있다.
+- 날짜만 쓴 `'Jul 24 2026'` 은 그 날 00:00 으로 잡혀 시각 있는 같은 날 글보다 앞(과거)에 놓인다.
 
 본문에서 `> **내 진단** ...` 으로 시작하는 인용문은 블로그에서 앰버 aside 로 강조된다 (벨로그/GitHub 에선 평범한 인용문으로 강등되어 이식성이 유지된다).
 

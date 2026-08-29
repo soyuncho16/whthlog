@@ -1,34 +1,58 @@
 import { describe, expect, it } from 'vitest';
-import { getReadingOrderPosts, sortBlogPosts } from './posts';
+import { getReadingOrderPosts, publishedAt, sortBlogPosts } from './posts';
 
-describe('sortBlogPosts', () => {
-	it('sorts newest posts first and keeps same-day series in explicit order', () => {
-		const posts = [
-			{ id: 'b', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 2 } },
-			{ id: 'a', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 1 } },
-			{ id: 'c', data: { pubDate: new Date('2026-07-25T00:00:00Z') } },
-		] as any;
+const at = (iso: string, seriesOrder?: number, id = iso) =>
+	({ id, data: { pubDate: new Date(iso), seriesOrder } }) as any;
 
-		const sorted = sortBlogPosts(posts);
-		expect(sorted.map((p) => p.id)).toEqual(['c', 'a', 'b']);
+describe('publishedAt', () => {
+	it('uses pubDate time as the primary axis', () => {
+		const a = at('2026-07-24T10:00:00+09:00');
+		const b = at('2026-07-24T11:00:00+09:00');
+		expect(publishedAt(a)).toBeLessThan(publishedAt(b));
 	});
 
-	it('keeps fallback order for same-day posts without explicit seriesOrder', () => {
-		const posts = [
-			{ id: 'x', data: { pubDate: new Date('2026-07-24T00:00:00Z') } },
-			{ id: 'y', data: { pubDate: new Date('2026-07-24T00:00:00Z') } },
-		] as any;
-
-		expect(sortBlogPosts(posts).map((p) => p.id)).toEqual(['x', 'y']);
+	it('treats seriesOrder as a later-in-the-day offset when times tie', () => {
+		const p1 = at('2026-07-24T00:00:00Z', 1);
+		const p2 = at('2026-07-24T00:00:00Z', 2);
+		expect(publishedAt(p1)).toBeLessThan(publishedAt(p2));
 	});
 
-	it('keeps reading-order navigation in the natural series sequence for same-day posts', () => {
-		const posts = [
-			{ id: 'p3', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 3 } },
-			{ id: 'p1', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 1 } },
-			{ id: 'p2', data: { pubDate: new Date('2026-07-24T00:00:00Z'), seriesOrder: 2 } },
-		] as any;
+	it('keeps a seriesOrder offset smaller than one day', () => {
+		const late = at('2026-07-24T00:00:00Z', 99);
+		const nextDay = at('2026-07-25T00:00:00Z');
+		expect(publishedAt(late)).toBeLessThan(publishedAt(nextDay));
+	});
+});
 
-		expect(getReadingOrderPosts(posts).map((p) => p.id)).toEqual(['p1', 'p2', 'p3']);
+describe('sortBlogPosts (lists: newest first)', () => {
+	it('orders same-day series by time, latest on top', () => {
+		const posts = [at('2026-07-24T00:00:00Z', 2, 'p2'), at('2026-07-24T00:00:00Z', 1, 'p1'), at('2026-07-25T00:00:00Z', undefined, 'c')];
+		expect(sortBlogPosts(posts).map((p) => p.id)).toEqual(['c', 'p2', 'p1']);
+	});
+
+	it('orders timed same-day posts by their time', () => {
+		const posts = [at('2026-07-24T10:00:00+09:00', undefined, 'morning'), at('2026-07-24T15:00:00+09:00', undefined, 'afternoon')];
+		expect(sortBlogPosts(posts).map((p) => p.id)).toEqual(['afternoon', 'morning']);
+	});
+
+	it('falls back to id (later slug = later post) when time and seriesOrder tie', () => {
+		const posts = [at('2026-07-24T00:00:00Z', undefined, 'y'), at('2026-07-24T00:00:00Z', undefined, 'x')];
+		expect(sortBlogPosts(posts).map((p) => p.id)).toEqual(['y', 'x']);
+		expect(getReadingOrderPosts(posts).map((p) => p.id)).toEqual(['x', 'y']);
+	});
+});
+
+describe('getReadingOrderPosts (pager: oldest first)', () => {
+	it('is the exact reverse of the list order across days and series', () => {
+		const posts = [
+			at('2026-07-24T00:00:00Z', 3, 'p3'),
+			at('2026-07-12T00:00:00Z', undefined, 'old'),
+			at('2026-07-24T00:00:00Z', 1, 'p1'),
+			at('2026-07-24T00:00:00Z', 2, 'p2'),
+		];
+		expect(getReadingOrderPosts(posts).map((p) => p.id)).toEqual(['old', 'p1', 'p2', 'p3']);
+		expect(getReadingOrderPosts(posts).map((p) => p.id)).toEqual(
+			sortBlogPosts(posts).map((p) => p.id).reverse(),
+		);
 	});
 });

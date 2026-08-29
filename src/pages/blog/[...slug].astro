@@ -10,7 +10,7 @@ export async function getStaticPaths() {
 		params: { slug: post.id },
 		props: {
 			post,
-			// 읽는 흐름 기준: 1->2->3. 최신순 홈 리스트와는 별개로 네비게이션만 자연 순서를 따른다.
+			// posts 는 발행 시각 오름차순. 다음 글 = 시간상 더 나중 글, 이전 글 = 더 이른 글.
 			newer: posts[i + 1] ?? null,
 			older: posts[i - 1] ?? null,
 		},
