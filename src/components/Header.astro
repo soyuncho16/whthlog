@@ -29,13 +29,19 @@ import { SECTIONS } from '../lib/taxonomy';
 				}
 			</ul>
 			<div class="tail">
-				<input
-					class="search"
-					type="search"
-					placeholder="검색 (준비 중)"
-					disabled
-					aria-label="검색 (준비 중)"
-				/>
+				<div class="search-box">
+					<input
+						class="search"
+						type="search"
+						placeholder="검색"
+						autocomplete="off"
+						aria-label="검색"
+						aria-expanded="false"
+						role="combobox"
+						aria-controls="search-panel"
+					/>
+					<div class="search-panel" id="search-panel" role="listbox" hidden></div>
+				</div>
 				<ThemeToggle />
 			</div>
 		</div>
@@ -55,6 +61,127 @@ import { SECTIONS } from '../lib/taxonomy';
 		const open = header?.classList.toggle('open') ?? false;
 		toggle.setAttribute('aria-expanded', String(open));
 	});
+</script>
+
+<script>
+	import { searchDocs, matchRanges, type SearchDoc } from '../lib/search';
+	import { base } from '../lib/url';
+
+	const box = document.querySelector<HTMLElement>('.search-box');
+	const input = box?.querySelector<HTMLInputElement>('.search');
+	const panel = box?.querySelector<HTMLElement>('.search-panel');
+
+	if (box && input && panel) {
+		let docs: SearchDoc[] | null = null;
+		let loading: Promise<SearchDoc[]> | null = null;
+		let active = -1;
+
+		const loadIndex = () => {
+			loading ??= fetch(`${base}search-index.json`)
+				.then((r) => r.json())
+				.then((d: SearchDoc[]) => (docs = d));
+			return loading;
+		};
+
+		/** 토큰 매칭 구간을 <mark> 로 감싼 노드 생성 (innerHTML 미사용). */
+		const highlight = (text: string, tokens: string[]) => {
+			const frag = document.createDocumentFragment();
+			let pos = 0;
+			for (const [s, e] of matchRanges(text, tokens)) {
+				if (s > pos) frag.append(text.slice(pos, s));
+				const mark = document.createElement('mark');
+				mark.textContent = text.slice(s, e);
+				frag.append(mark);
+				pos = e;
+			}
+			if (pos < text.length) frag.append(text.slice(pos));
+			return frag;
+		};
+
+		const close = () => {
+			panel.hidden = true;
+			input.setAttribute('aria-expanded', 'false');
+			active = -1;
+		};
+
+		const setActive = (i: number) => {
+			const rows = [...panel.querySelectorAll<HTMLAnchorElement>('.row')];
+			if (rows.length === 0) return;
+			active = ((i % rows.length) + rows.length) % rows.length;
+			rows.forEach((r, k) => r.classList.toggle('active', k === active));
+			rows[active].scrollIntoView({ block: 'nearest' });
+		};
+
+		const renderResults = (query: string) => {
+			if (!docs) return;
+			const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+			panel.replaceChildren();
+			active = -1;
+			if (tokens.length === 0) {
+				close();
+				return;
+			}
+			const hits = searchDocs(docs, query);
+			if (hits.length === 0) {
+				const empty = document.createElement('p');
+				empty.className = 'empty';
+				empty.textContent = '결과 없음';
+				panel.append(empty);
+			}
+			for (const hit of hits) {
+				const a = document.createElement('a');
+				a.className = 'row';
+				a.href = `${base}blog/${hit.doc.id}/`;
+				a.setAttribute('role', 'option');
+
+				const title = document.createElement('span');
+				title.className = 'row-title';
+				title.append(highlight(hit.doc.title, tokens));
+				a.append(title);
+
+				const meta = document.createElement('span');
+				meta.className = 'row-meta';
+				meta.textContent = `${hit.doc.section}/${hit.doc.subsection} · ${hit.doc.pubDate.slice(0, 10)}`;
+				a.append(meta);
+
+				if (hit.snippet) {
+					const snip = document.createElement('span');
+					snip.className = 'row-snippet';
+					snip.append(highlight(hit.snippet, tokens));
+					a.append(snip);
+				}
+				panel.append(a);
+			}
+			panel.hidden = false;
+			input.setAttribute('aria-expanded', 'true');
+		};
+
+		input.addEventListener('focus', () => void loadIndex());
+		input.addEventListener('input', async () => {
+			await loadIndex();
+			renderResults(input.value);
+		});
+		input.addEventListener('keydown', (e) => {
+			if (panel.hidden) return;
+			if (e.key === 'ArrowDown') {
+				e.preventDefault();
+				setActive(active + 1);
+			} else if (e.key === 'ArrowUp') {
+				e.preventDefault();
+				setActive(active - 1);
+			} else if (e.key === 'Enter') {
+				const rows = panel.querySelectorAll<HTMLAnchorElement>('.row');
+				const target = rows[active === -1 ? 0 : active];
+				if (target) location.assign(target.href);
+			} else if (e.key === 'Escape') {
+				close();
+				input.blur();
+			}
+		});
+		document.addEventListener('click', (e) => {
+			if (!(e.target instanceof Node) || !box.contains(e.target)) close();
+		});
+	}
 </script>
 
 <style>
@@ -161,6 +288,9 @@ import { SECTIONS } from '../lib/taxonomy';
 		align-items: center;
 		gap: 0.75em;
 	}
+	.search-box {
+		position: relative;
+	}
 	.search {
 		font: inherit;
 		font-size: 0.85em;
@@ -168,8 +298,70 @@ import { SECTIONS } from '../lib/taxonomy';
 		border-radius: 999px;
 		border: 1px solid var(--line);
 		background: var(--bg-tint);
-		color: var(--ink-soft);
+		color: var(--ink);
 		width: 11em;
+		transition: border-color 0.15s ease;
+	}
+	.search:focus {
+		outline: none;
+		border-color: var(--accent);
+	}
+	.search-panel {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		width: 24em;
+		max-width: 90vw;
+		max-height: 24em;
+		overflow-y: auto;
+		background: var(--bg);
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		box-shadow: var(--card-shadow);
+		padding: 0.35em;
+	}
+	.search-panel :global(.empty) {
+		margin: 0;
+		padding: 0.6em 0.8em;
+		font-size: 0.85em;
+		color: var(--ink-soft);
+	}
+	.search-panel :global(.row) {
+		display: block;
+		padding: 0.5em 0.8em;
+		border-radius: 6px;
+		text-decoration: none;
+	}
+	.search-panel :global(.row:hover),
+	.search-panel :global(.row.active) {
+		background: var(--bg-tint);
+	}
+	.search-panel :global(.row-title) {
+		display: block;
+		font-size: 0.92em;
+		font-weight: 550;
+		color: var(--ink);
+	}
+	.search-panel :global(.row-meta) {
+		display: block;
+		margin-top: 0.15em;
+		font-family: var(--mono);
+		font-size: 0.75em;
+		color: var(--ink-soft);
+	}
+	.search-panel :global(.row-snippet) {
+		display: block;
+		margin-top: 0.25em;
+		font-size: 0.82em;
+		color: var(--ink-soft);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.search-panel :global(mark) {
+		background: none;
+		color: var(--accent);
+		font-weight: 650;
 	}
 	.menu-toggle {
 		display: none;
@@ -212,8 +404,16 @@ import { SECTIONS } from '../lib/taxonomy';
 			border: none;
 			padding: 0 0 0 1em;
 		}
+		.search-box,
 		.search {
 			width: 100%;
+		}
+		.search-panel {
+			position: static;
+			width: 100%;
+			max-width: none;
+			margin-top: 6px;
+			box-shadow: none;
 		}
 	}
 </style>
