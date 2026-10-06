@@ -87,4 +87,4 @@ mtr로 경로를 보면 학교망 4홉을 지나 KT로 나가고 14홉째가 목
 
 ## 링크
 
-- 같은 날 진단한 글: ['VSCode로 홈을 열자 CPU 폭주: 심볼릭 링크 탈출과 메모리 스래싱'](/whthlog/blog/2026-09-18-home-workspace-symlink-escape-oom/)
+- 같은 날 진단한 글: [VSCode로 홈을 열자 CPU 폭주: 심볼릭 링크 탈출과 메모리 스래싱](/whthlog/blog/2026-09-18-home-workspace-symlink-escape-oom/)

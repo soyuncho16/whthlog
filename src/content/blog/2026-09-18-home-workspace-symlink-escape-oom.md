@@ -107,4 +107,4 @@ inotify 한도를 올리거나 스왑을 늘리는 건 증상 완화다. 워처 
 ## 링크
 
 - 관련 글: [컨테이너 격리의 두 축: namespace와 cgroup](/whthlog/blog/2026-07-24-namespace-and-cgroup/)
-- 같은 날 진단한 글: ['Claude Code만 접속 타임아웃: TCP는 붙고 TLS 데이터만 사라지는 흐름 단위 장애'](/whthlog/blog/2026-09-18-tls-stall-after-tcp-handshake-keepalive/)
+- 같은 날 진단한 글: [Claude Code만 접속 타임아웃: TCP는 붙고 TLS 데이터만 사라지는 흐름 단위 장애](/whthlog/blog/2026-09-18-tls-stall-after-tcp-handshake-keepalive/)
